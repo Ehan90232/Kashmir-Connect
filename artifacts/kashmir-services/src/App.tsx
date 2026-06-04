@@ -13,6 +13,7 @@ import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Admin from "@/pages/Admin";
 import RateWorker from "@/pages/RateWorker";
+import Signup from "@/pages/Signup";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/admin" component={Admin} />
         <Route path="/rate/:workerId" component={RateWorker} />
+        <Route path="/signup" component={Signup} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

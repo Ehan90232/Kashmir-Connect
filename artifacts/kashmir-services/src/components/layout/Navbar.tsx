@@ -29,6 +29,11 @@ export function Navbar() {
               <span>Login</span>
             </Button>
           </Link>
+          <Link href="/signup" className="hidden md:inline-flex">
+            <Button size="sm" className="gap-2">
+              Sign Up
+            </Button>
+          </Link>
           <Button variant="outline" size="icon" className="md:hidden">
             <Menu className="w-5 h-5" />
           </Button>

@@ -95,7 +95,8 @@ export default function Login() {
         </Form>
         
         <div className="mt-6 text-center text-sm text-muted-foreground">
-          Don't have an account? <span className="text-primary font-medium hover:underline cursor-pointer" onClick={() => navigate("/register")}>Register as Worker</span>
+          Don't have an account?{" "}
+          <span className="text-primary font-medium hover:underline cursor-pointer" onClick={() => navigate("/signup")}>Sign up</span>
         </div>
       </div>
     </div>
