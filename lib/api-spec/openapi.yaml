@@ -1,22 +1,28 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Kashmir Local Services Marketplace API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: workers
+    description: Worker operations
+  - name: reviews
+    description: Review operations
+  - name: categories
+    description: Category operations
+  - name: stats
+    description: Statistics and dashboard data
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +30,276 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /workers:
+    get:
+      operationId: listWorkers
+      tags: [workers]
+      summary: List workers with optional location/category filter
+      parameters:
+        - name: lat
+          in: query
+          schema: { type: number }
+        - name: lng
+          in: query
+          schema: { type: number }
+        - name: radius
+          in: query
+          schema: { type: number }
+          description: Radius in km (default 20)
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: available
+          in: query
+          schema: { type: boolean }
+        - name: sort
+          in: query
+          schema: { type: string, enum: [distance, rating, membership] }
+      responses:
+        "200":
+          description: List of workers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Worker"
+    post:
+      operationId: createWorker
+      tags: [workers]
+      summary: Register a new worker
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkerInput"
+      responses:
+        "201":
+          description: Worker created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+
+  /workers/nearby:
+    get:
+      operationId: getNearbyWorkers
+      tags: [workers]
+      summary: Get nearby workers sorted by distance
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema: { type: number }
+        - name: lng
+          in: query
+          required: true
+          schema: { type: number }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Nearby workers sorted by distance
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WorkerWithDistance"
+
+  /workers/{id}:
+    get:
+      operationId: getWorker
+      tags: [workers]
+      summary: Get worker by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Worker profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateWorker
+      tags: [workers]
+      summary: Update worker profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkerUpdate"
+      responses:
+        "200":
+          description: Updated worker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+    delete:
+      operationId: deleteWorker
+      tags: [workers]
+      summary: Delete a worker (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "204":
+          description: Deleted
+
+  /workers/{id}/availability:
+    patch:
+      operationId: updateWorkerAvailability
+      tags: [workers]
+      summary: Toggle worker availability
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AvailabilityUpdate"
+      responses:
+        "200":
+          description: Updated worker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+
+  /workers/{id}/membership:
+    patch:
+      operationId: updateWorkerMembership
+      tags: [workers]
+      summary: Update worker membership (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MembershipUpdate"
+      responses:
+        "200":
+          description: Updated worker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Worker"
+
+  /workers/{workerId}/reviews:
+    get:
+      operationId: listWorkerReviews
+      tags: [reviews]
+      summary: Get reviews for a worker
+      parameters:
+        - name: workerId
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: List of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Review"
+    post:
+      operationId: createReview
+      tags: [reviews]
+      summary: Submit a review for a worker
+      parameters:
+        - name: workerId
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewInput"
+      responses:
+        "201":
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [categories]
+      summary: List all service categories
+      responses:
+        "200":
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /stats/summary:
+    get:
+      operationId: getStatsSummary
+      tags: [stats]
+      summary: Admin dashboard stats
+      responses:
+        "200":
+          description: Dashboard summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatsSummary"
+
+  /stats/by-category:
+    get:
+      operationId: getStatsByCategory
+      tags: [stats]
+      summary: Worker counts grouped by category
+      responses:
+        "200":
+          description: Category stats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CategoryStat"
+
 components:
   schemas:
     HealthStatus:
@@ -31,6 +307,125 @@ components:
       properties:
         status:
           type: string
-      required:
-        - status
+      required: [status]
 
+    Worker:
+      type: object
+      properties:
+        id:          { type: integer }
+        name:        { type: string }
+        phone:       { type: string }
+        photoUrl:    { type: ["string", "null"] }
+        profession:  { type: string }
+        category:    { type: string }
+        latitude:    { type: number }
+        longitude:   { type: number }
+        isAvailable: { type: boolean }
+        membershipType:
+          type: string
+          enum: [free, premium, premium_plus]
+        averageRating: { type: number }
+        totalRatings:  { type: integer }
+        area:          { type: ["string", "null"] }
+        isApproved:    { type: boolean }
+        bio:           { type: ["string", "null"] }
+        createdAt:     { type: string }
+      required: [id, name, phone, profession, category, latitude, longitude, isAvailable, membershipType, averageRating, totalRatings, isApproved, createdAt]
+
+    WorkerWithDistance:
+      allOf:
+        - $ref: "#/components/schemas/Worker"
+        - type: object
+          properties:
+            distanceKm: { type: number }
+          required: [distanceKm]
+
+    WorkerInput:
+      type: object
+      properties:
+        name:        { type: string }
+        phone:       { type: string }
+        photoUrl:    { type: string }
+        profession:  { type: string }
+        category:    { type: string }
+        latitude:    { type: number }
+        longitude:   { type: number }
+        area:        { type: string }
+        bio:         { type: string }
+      required: [name, phone, profession, category, latitude, longitude]
+
+    WorkerUpdate:
+      type: object
+      properties:
+        name:        { type: string }
+        phone:       { type: string }
+        photoUrl:    { type: string }
+        profession:  { type: string }
+        category:    { type: string }
+        latitude:    { type: number }
+        longitude:   { type: number }
+        area:        { type: string }
+        bio:         { type: string }
+        isApproved:  { type: boolean }
+
+    AvailabilityUpdate:
+      type: object
+      properties:
+        isAvailable: { type: boolean }
+      required: [isAvailable]
+
+    MembershipUpdate:
+      type: object
+      properties:
+        membershipType:
+          type: string
+          enum: [free, premium, premium_plus]
+      required: [membershipType]
+
+    Review:
+      type: object
+      properties:
+        id:           { type: integer }
+        workerId:     { type: integer }
+        reviewerName: { type: string }
+        rating:       { type: integer }
+        comment:      { type: ["string", "null"] }
+        createdAt:    { type: string }
+      required: [id, workerId, reviewerName, rating, createdAt]
+
+    ReviewInput:
+      type: object
+      properties:
+        reviewerName: { type: string }
+        rating:       { type: integer }
+        comment:      { type: string }
+      required: [reviewerName, rating]
+
+    Category:
+      type: object
+      properties:
+        id:    { type: integer }
+        name:  { type: string }
+        icon:  { type: string }
+        slug:  { type: string }
+      required: [id, name, icon, slug]
+
+    StatsSummary:
+      type: object
+      properties:
+        totalWorkers:      { type: integer }
+        activeWorkers:     { type: integer }
+        premiumWorkers:    { type: integer }
+        premiumPlusWorkers: { type: integer }
+        totalReviews:      { type: integer }
+        avgRating:         { type: number }
+        pendingApprovals:  { type: integer }
+      required: [totalWorkers, activeWorkers, premiumWorkers, premiumPlusWorkers, totalReviews, avgRating, pendingApprovals]
+
+    CategoryStat:
+      type: object
+      properties:
+        category:  { type: string }
+        count:     { type: integer }
+        available: { type: integer }
+      required: [category, count, available]

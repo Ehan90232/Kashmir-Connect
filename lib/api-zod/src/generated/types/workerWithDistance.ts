@@ -5,7 +5,8 @@
  * Kashmir Local Services Marketplace API
  * OpenAPI spec version: 0.1.0
  */
+import type { Worker } from './worker';
 
-export interface HealthStatus {
-  status: string;
-}
+export type WorkerWithDistance = Worker & {
+  distanceKm: number;
+};
