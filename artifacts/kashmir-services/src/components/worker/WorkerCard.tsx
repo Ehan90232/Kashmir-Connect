@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MembershipBadge } from "./MembershipBadge";
-import type { Worker, WorkerWithDistance } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { Worker, WorkerWithDistance } from "@workspace/api-client-react";
 
 interface WorkerCardProps {
   worker: Worker | WorkerWithDistance;

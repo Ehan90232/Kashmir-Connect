@@ -1,6 +1,6 @@
 import { useParams, Link } from "wouter";
 import { Star, Phone, MessageCircle, MapPin, Calendar, Info, Award, UserCircle } from "lucide-react";
-import { useGetWorker, useListWorkerReviews } from "@workspace/api-client-react";
+import { useGetWorker, useListWorkerReviews, getGetWorkerQueryKey, getListWorkerReviewsQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,11 +15,11 @@ export default function WorkerProfile() {
   const id = params.id ? parseInt(params.id) : 0;
 
   const { data: worker, isLoading: workerLoading } = useGetWorker(id, {
-    query: { enabled: !!id }
+    query: { enabled: !!id, queryKey: getGetWorkerQueryKey(id) }
   });
 
   const { data: reviews, isLoading: reviewsLoading } = useListWorkerReviews(id, {
-    query: { enabled: !!id }
+    query: { enabled: !!id, queryKey: getListWorkerReviewsQueryKey(id) }
   });
 
   if (workerLoading) {

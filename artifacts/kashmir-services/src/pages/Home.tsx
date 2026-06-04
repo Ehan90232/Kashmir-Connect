@@ -4,7 +4,7 @@ import { Search, MapPin, Navigation, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "@/hooks/use-location";
-import { useGetNearbyWorkers, useListCategories } from "@workspace/api-client-react";
+import { useGetNearbyWorkers, useListCategories, getGetNearbyWorkersQueryKey, getListCategoriesQueryKey } from "@workspace/api-client-react";
 import { WorkerCard } from "@/components/worker/WorkerCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -24,11 +24,14 @@ export default function Home() {
   const [, setLocationPath] = useWouterLocation();
   const { location, requestLocation, loading: locationLoading, error: locationError } = useLocation();
   
-  const { data: categories, isLoading: categoriesLoading } = useListCategories();
-  
+  const { data: categories, isLoading: categoriesLoading } = useListCategories({
+    query: { queryKey: getListCategoriesQueryKey() }
+  });
+
+  const nearbyParams = { lat: location?.lat || 0, lng: location?.lng || 0, limit: 6 };
   const { data: nearbyWorkers, isLoading: nearbyLoading } = useGetNearbyWorkers(
-    { lat: location?.lat || 0, lng: location?.lng || 0, limit: 6 },
-    { query: { enabled: !!location } }
+    nearbyParams,
+    { query: { enabled: !!location, queryKey: getGetNearbyWorkersQueryKey(nearbyParams) } }
   );
 
   return (

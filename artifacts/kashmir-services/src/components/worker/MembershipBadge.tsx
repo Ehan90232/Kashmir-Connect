@@ -1,5 +1,5 @@
 import { ShieldCheck, Crown } from "lucide-react";
-import type { WorkerMembershipType } from "@workspace/api-client-react/src/generated/api.schemas";
+import type { WorkerMembershipType } from "@workspace/api-client-react";
 
 interface MembershipBadgeProps {
   type: WorkerMembershipType;

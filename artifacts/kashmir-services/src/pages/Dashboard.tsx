@@ -1,4 +1,4 @@
-import { useGetWorker, useUpdateWorkerAvailability } from "@workspace/api-client-react";
+import { useGetWorker, useUpdateWorkerAvailability, getGetWorkerQueryKey } from "@workspace/api-client-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -12,7 +12,7 @@ export default function Dashboard() {
   const workerId = 1;
   
   const { data: worker, isLoading } = useGetWorker(workerId, {
-    query: { enabled: true }
+    query: { enabled: true, queryKey: getGetWorkerQueryKey(workerId) }
   });
   
   const updateAvailability = useUpdateWorkerAvailability();
