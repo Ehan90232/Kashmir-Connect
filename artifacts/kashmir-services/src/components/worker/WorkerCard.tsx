@@ -27,17 +27,17 @@ export function WorkerCard({ worker, showDistance = false }: WorkerCardProps) {
           </Avatar>
           
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-2">
-              <Link href={`/workers/${worker.id}`} className="hover:underline focus:outline-none focus:underline truncate">
-                <h3 className="font-semibold text-lg text-card-foreground flex items-center gap-1.5 truncate">
-                  {worker.name}
+            <div className="flex items-start justify-between gap-2">
+              <Link href={`/workers/${worker.id}`} className="hover:underline focus:outline-none focus:underline min-w-0">
+                <h3 className="font-semibold text-lg text-card-foreground leading-snug flex items-center gap-1.5 flex-wrap">
+                  <span>{worker.name}</span>
                   <MembershipBadge type={worker.membershipType} />
                 </h3>
               </Link>
               {isAvailable ? (
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 shrink-0">Available</Badge>
+                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 shrink-0 mt-0.5">Available</Badge>
               ) : (
-                <Badge variant="outline" className="bg-gray-50 text-gray-500 border-gray-200 shrink-0">Busy</Badge>
+                <Badge variant="outline" className="bg-gray-50 text-gray-500 border-gray-200 shrink-0 mt-0.5">Busy</Badge>
               )}
             </div>
             
