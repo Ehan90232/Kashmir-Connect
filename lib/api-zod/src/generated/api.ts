@@ -9,6 +9,71 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary List all job requests
+ */
+export const ListJobRequestsQueryParams = zod.object({
+  "status": zod.enum(['open', 'assigned', 'closed']).optional(),
+  "category": zod.coerce.string().optional()
+})
+
+export const ListJobRequestsResponseItem = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "phone": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "area": zod.string(),
+  "latitude": zod.number().nullish(),
+  "longitude": zod.number().nullish(),
+  "budget": zod.string().nullish(),
+  "status": zod.enum(['open', 'assigned', 'closed']),
+  "createdAt": zod.string()
+})
+export const ListJobRequestsResponse = zod.array(ListJobRequestsResponseItem)
+
+
+/**
+ * @summary Post a new job request
+ */
+export const CreateJobRequestBody = zod.object({
+  "customerName": zod.string(),
+  "phone": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "area": zod.string(),
+  "latitude": zod.number().optional(),
+  "longitude": zod.number().optional(),
+  "budget": zod.string().optional()
+})
+
+
+/**
+ * @summary Update job request status (admin)
+ */
+export const UpdateJobRequestStatusParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateJobRequestStatusBody = zod.object({
+  "status": zod.enum(['open', 'assigned', 'closed'])
+})
+
+export const UpdateJobRequestStatusResponse = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "phone": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "area": zod.string(),
+  "latitude": zod.number().nullish(),
+  "longitude": zod.number().nullish(),
+  "budget": zod.string().nullish(),
+  "status": zod.enum(['open', 'assigned', 'closed']),
+  "createdAt": zod.string()
+})
+
+
+/**
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({

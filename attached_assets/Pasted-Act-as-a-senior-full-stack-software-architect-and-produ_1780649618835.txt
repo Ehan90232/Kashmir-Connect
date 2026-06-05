@@ -1,0 +1,192 @@
+Act as a senior full-stack software architect and production engineer.
+
+My website UI and design already exist. DO NOT redesign or rebuild the website visually unless necessary. Your task is to convert the existing project into a fully functional, production-ready application while preserving the current design and user experience.
+
+Project:
+Location-based local services marketplace for Kashmir (initial launch in Anantnag).
+
+Goal:
+Customers should instantly find nearby workers based on location. Workers should register and become discoverable.
+
+Stack:
+Frontend:
+
+* HTML
+* CSS
+* JavaScript
+
+Backend:
+
+* Firebase Authentication
+* Firestore Database
+* Firebase Storage
+* Firebase Hosting
+
+GENERAL RULES:
+
+* Reuse existing files.
+* Preserve current styling.
+* Do not create placeholder functionality.
+* Build real backend integration.
+* Ensure complete end-to-end functionality.
+* Modular and scalable architecture.
+* Mobile-first performance.
+
+AUTHENTICATION:
+Implement:
+
+* Worker signup/login
+* Customer signup/login
+* Persistent sessions
+* Logout
+* Role-based access
+
+Store:
+uid
+role
+createdAt
+
+FIRESTORE STRUCTURE:
+
+users/
+workers/
+reviews/
+memberships/
+reports/
+categories/
+
+WORKER SYSTEM:
+Worker must be able to:
+
+* Register
+* Upload profile image
+* Enter name
+* Enter phone
+* Select profession
+* Set availability
+* Save location
+* Edit profile
+* Delete profile
+
+Save:
+uid
+name
+profession
+phone
+photoURL
+rating
+totalReviews
+premium
+premiumPlus
+available
+latitude
+longitude
+createdAt
+
+CUSTOMER FLOW:
+Customer:
+Open website
+→ allow location
+→ choose category
+→ see nearby workers
+→ open profile
+→ call
+→ WhatsApp
+→ review
+
+LOCATION ENGINE:
+Implement:
+
+* Browser geolocation
+* Distance calculation
+* Nearby sorting
+* Permission handling
+* Location fallback
+
+SEARCH & DISCOVERY:
+Support:
+
+* Category filtering
+* Text search
+* Distance sorting
+* Rating sorting
+
+Ranking order:
+Premium Plus
+Premium
+Rating
+Distance
+
+PREMIUM SYSTEM:
+Premium:
+
+* Dynamic blue verification badge
+
+Premium Plus:
+
+* Higher ranking
+
+Badge must be rendered from database values only.
+
+REVIEWS:
+Implement:
+
+* Customer ratings
+* Review submission
+* Average rating updates
+* Prevent duplicate reviews
+
+ADMIN DASHBOARD:
+Admin can:
+
+* View users
+* View workers
+* Approve/suspend workers
+* Manage memberships
+* Moderate reviews
+* View analytics
+
+STORAGE:
+Use Firebase Storage for:
+
+* Profile photos
+
+SECURITY:
+Implement:
+
+* Firebase Security Rules
+* Protected admin routes
+* Validation
+* Access control
+* Secure writes
+
+PERFORMANCE:
+Add:
+
+* Loading states
+* Error handling
+* Skeleton states
+* Lazy loading
+* Responsive optimization
+
+DEPLOYMENT:
+Prepare production deployment:
+
+* Environment configuration
+* Firebase Hosting
+* Build verification
+
+FINAL REQUIREMENTS:
+
+1. Audit existing code
+2. Identify missing backend functionality
+3. Implement missing logic
+4. Connect all pages
+5. Remove mock data
+6. Generate complete Firebase integration
+7. Produce working application
+8. Explain setup steps
+9. Provide deployment checklist
+10. Verify all flows work end-to-end
+
+Do not stop until all pages are connected and functional.

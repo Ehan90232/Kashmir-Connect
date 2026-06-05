@@ -17,7 +17,74 @@ tags:
     description: Category operations
   - name: stats
     description: Statistics and dashboard data
+  - name: jobRequests
+    description: Customer job request operations
 paths:
+  /job-requests:
+    get:
+      operationId: listJobRequests
+      tags: [jobRequests]
+      summary: List all job requests
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [open, assigned, closed] }
+        - name: category
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of job requests
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JobRequest"
+    post:
+      operationId: createJobRequest
+      tags: [jobRequests]
+      summary: Post a new job request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobRequestInput"
+      responses:
+        "201":
+          description: Job request created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobRequest"
+
+  /job-requests/{id}/status:
+    patch:
+      operationId: updateJobRequestStatus
+      tags: [jobRequests]
+      summary: Update job request status (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JobRequestStatusUpdate"
+      responses:
+        "200":
+          description: Updated job request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JobRequest"
+        "404":
+          description: Not found
+
   /healthz:
     get:
       operationId: healthCheck
@@ -429,3 +496,42 @@ components:
         count:     { type: integer }
         available: { type: integer }
       required: [category, count, available]
+
+    JobRequest:
+      type: object
+      properties:
+        id:           { type: integer }
+        customerName: { type: string }
+        phone:        { type: string }
+        category:     { type: string }
+        description:  { type: string }
+        area:         { type: string }
+        latitude:     { type: ["number", "null"] }
+        longitude:    { type: ["number", "null"] }
+        budget:       { type: ["string", "null"] }
+        status:
+          type: string
+          enum: [open, assigned, closed]
+        createdAt:    { type: string }
+      required: [id, customerName, phone, category, description, area, status, createdAt]
+
+    JobRequestInput:
+      type: object
+      properties:
+        customerName: { type: string }
+        phone:        { type: string }
+        category:     { type: string }
+        description:  { type: string }
+        area:         { type: string }
+        latitude:     { type: number }
+        longitude:    { type: number }
+        budget:       { type: string }
+      required: [customerName, phone, category, description, area]
+
+    JobRequestStatusUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [open, assigned, closed]
+      required: [status]

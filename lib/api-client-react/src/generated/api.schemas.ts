@@ -125,6 +125,70 @@ export interface CategoryStat {
   available: number;
 }
 
+export type JobRequestStatus = typeof JobRequestStatus[keyof typeof JobRequestStatus];
+
+
+export const JobRequestStatus = {
+  open: 'open',
+  assigned: 'assigned',
+  closed: 'closed',
+} as const;
+
+export interface JobRequest {
+  id: number;
+  customerName: string;
+  phone: string;
+  category: string;
+  description: string;
+  area: string;
+  /** @nullable */
+  latitude?: number | null;
+  /** @nullable */
+  longitude?: number | null;
+  /** @nullable */
+  budget?: string | null;
+  status: JobRequestStatus;
+  createdAt: string;
+}
+
+export interface JobRequestInput {
+  customerName: string;
+  phone: string;
+  category: string;
+  description: string;
+  area: string;
+  latitude?: number;
+  longitude?: number;
+  budget?: string;
+}
+
+export type JobRequestStatusUpdateStatus = typeof JobRequestStatusUpdateStatus[keyof typeof JobRequestStatusUpdateStatus];
+
+
+export const JobRequestStatusUpdateStatus = {
+  open: 'open',
+  assigned: 'assigned',
+  closed: 'closed',
+} as const;
+
+export interface JobRequestStatusUpdate {
+  status: JobRequestStatusUpdateStatus;
+}
+
+export type ListJobRequestsParams = {
+status?: ListJobRequestsStatus;
+category?: string;
+};
+
+export type ListJobRequestsStatus = typeof ListJobRequestsStatus[keyof typeof ListJobRequestsStatus];
+
+
+export const ListJobRequestsStatus = {
+  open: 'open',
+  assigned: 'assigned',
+  closed: 'closed',
+} as const;
+
 export type ListWorkersParams = {
 lat?: number;
 lng?: number;

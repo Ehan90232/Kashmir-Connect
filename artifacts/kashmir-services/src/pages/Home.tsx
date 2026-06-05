@@ -98,6 +98,21 @@ export default function Home() {
           </div>
         )}
 
+        {/* Post a Job CTA */}
+        <section className="mb-16">
+          <div className="bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h2 className="text-xl font-bold mb-1">Can't find the right worker?</h2>
+              <p className="text-muted-foreground">Post a job request and let available workers come to you. Free, instant, no middlemen.</p>
+            </div>
+            <Link href="/request" className="shrink-0">
+              <Button size="lg" className="rounded-xl gap-2 w-full md:w-auto">
+                Post a Job Request
+              </Button>
+            </Link>
+          </div>
+        </section>
+
         {/* Categories */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
