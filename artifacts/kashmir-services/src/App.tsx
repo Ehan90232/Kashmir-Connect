@@ -15,6 +15,7 @@ import Admin from "@/pages/Admin";
 import RateWorker from "@/pages/RateWorker";
 import Signup from "@/pages/Signup";
 import RequestWorker from "@/pages/RequestWorker";
+import CheckoutSuccess from "@/pages/CheckoutSuccess";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function Router() {
         <Route path="/rate/:workerId" component={RateWorker} />
         <Route path="/signup" component={Signup} />
         <Route path="/request" component={RequestWorker} />
+        <Route path="/checkout/success" component={CheckoutSuccess} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

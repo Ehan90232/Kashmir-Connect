@@ -20,6 +20,7 @@ export const workersTable = pgTable("workers", {
   area: text("area"),
   isApproved: boolean("is_approved").notNull().default(false),
   bio: text("bio"),
+  stripeCustomerId: text("stripe_customer_id"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
