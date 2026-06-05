@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation as useWouterLocation } from "wouter";
-import { Search, MapPin, Navigation, ArrowRight } from "lucide-react";
+import { Search, MapPin, Navigation, ArrowRight, MapPinned, Star, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "@/hooks/use-location";
@@ -124,6 +124,42 @@ export default function Home() {
                 </Link>
               ))
             ) : null}
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-10">How KashWork Works</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: <MapPinned className="w-7 h-7 text-primary" />,
+                step: "1",
+                title: "Share Your Location",
+                desc: "Allow location access or enter your area to instantly see professionals near you.",
+              },
+              {
+                icon: <Star className="w-7 h-7 text-amber-500" />,
+                step: "2",
+                title: "Pick the Best",
+                desc: "Browse workers by category, read verified reviews, and choose based on ratings.",
+              },
+              {
+                icon: <ShieldCheck className="w-7 h-7 text-green-600" />,
+                step: "3",
+                title: "Connect Directly",
+                desc: "Call or WhatsApp the worker directly — no middlemen, no booking fees.",
+              },
+            ].map(({ icon, step, title, desc }) => (
+              <div key={step} className="bg-card border rounded-2xl p-6 text-center relative overflow-hidden group hover-elevate transition-all">
+                <div className="absolute top-3 right-4 text-6xl font-black text-muted/20 select-none leading-none">{step}</div>
+                <div className="w-14 h-14 bg-muted/50 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  {icon}
+                </div>
+                <h3 className="font-bold text-lg mb-2">{title}</h3>
+                <p className="text-muted-foreground text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 

@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
-import { Star, Phone, MessageCircle, MapPin, Calendar, Info, Award, UserCircle } from "lucide-react";
+import { Star, Phone, MessageCircle, MapPin, Calendar, Info, Award, UserCircle, Share2, Check } from "lucide-react";
 import { useGetWorker, useListWorkerReviews, getGetWorkerQueryKey, getListWorkerReviewsQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,19 @@ import { format } from "date-fns";
 export default function WorkerProfile() {
   const params = useParams();
   const id = params.id ? parseInt(params.id) : 0;
+  const [copied, setCopied] = useState(false);
+
+  function handleShare() {
+    const url = window.location.href;
+    if (navigator.share) {
+      navigator.share({ title: "KashWork Profile", url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      });
+    }
+  }
 
   const { data: worker, isLoading: workerLoading } = useGetWorker(id, {
     query: { enabled: !!id, queryKey: getGetWorkerQueryKey(id) }
@@ -100,18 +114,22 @@ export default function WorkerProfile() {
 
           <Separator className="my-8" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Button size="lg" className="w-full text-lg rounded-xl h-14" asChild>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <Button size="lg" className="w-full rounded-xl h-12 text-base" asChild>
               <a href={`tel:${worker.phone}`}>
                 <Phone className="w-5 h-5 mr-2" />
-                Call {worker.phone}
+                Call
               </a>
             </Button>
-            <Button size="lg" variant="outline" className="w-full text-lg rounded-xl h-14 border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10" asChild>
+            <Button size="lg" variant="outline" className="w-full rounded-xl h-12 text-base border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10" asChild>
               <a href={`https://wa.me/91${worker.phone}`} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="w-5 h-5 mr-2" />
-                WhatsApp Message
+                WhatsApp
               </a>
+            </Button>
+            <Button size="lg" variant="outline" className="w-full rounded-xl h-12 text-base" onClick={handleShare}>
+              {copied ? <Check className="w-5 h-5 mr-2 text-green-600" /> : <Share2 className="w-5 h-5 mr-2" />}
+              {copied ? "Copied!" : "Share"}
             </Button>
           </div>
         </div>
