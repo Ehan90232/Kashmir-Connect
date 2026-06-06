@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { KeyRound } from "lucide-react";
+import { KeyRound, Loader2 } from "lucide-react";
+import { logIn, getUserProfile } from "@/lib/firebaseAuth";
+import { Link } from "wouter";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address."),
@@ -21,27 +23,30 @@ export default function Login() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Mock login logic
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Logged in successfully",
-      });
-      // Route based on mock role
-      if (values.email.includes("admin")) {
-        navigate("/admin");
-      } else {
+    try {
+      const user = await logIn(values.email, values.password);
+      const profile = await getUserProfile(user.uid);
+      toast({ title: "Welcome back!", description: `Signed in as ${profile?.name ?? values.email}` });
+      if (profile?.role === "worker") {
         navigate("/dashboard");
+      } else {
+        navigate("/workers");
       }
-    }, 1000);
+    } catch (err: any) {
+      const msg = err.code === "auth/invalid-credential" || err.code === "auth/wrong-password"
+        ? "Incorrect email or password."
+        : err.code === "auth/user-not-found"
+        ? "No account found with this email."
+        : err.message ?? "Login failed. Please try again.";
+      toast({ title: "Login failed", description: msg, variant: "destructive" });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -70,7 +75,6 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            
             <FormField
               control={form.control}
               name="password"
@@ -78,7 +82,6 @@ export default function Login() {
                 <FormItem>
                   <div className="flex items-center justify-between">
                     <FormLabel>Password</FormLabel>
-                    <span className="text-xs text-primary hover:underline cursor-pointer">Forgot?</span>
                   </div>
                   <FormControl>
                     <Input placeholder="••••••••" type="password" {...field} />
@@ -87,16 +90,15 @@ export default function Login() {
                 </FormItem>
               )}
             />
-
             <Button type="submit" className="w-full h-11" disabled={isLoading}>
-              {isLoading ? "Signing in..." : "Sign In"}
+              {isLoading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Signing in...</> : "Sign In"}
             </Button>
           </form>
         </Form>
-        
+
         <div className="mt-6 text-center text-sm text-muted-foreground">
           Don't have an account?{" "}
-          <span className="text-primary font-medium hover:underline cursor-pointer" onClick={() => navigate("/signup")}>Sign up</span>
+          <Link href="/signup" className="text-primary font-medium hover:underline">Sign up</Link>
         </div>
       </div>
     </div>
