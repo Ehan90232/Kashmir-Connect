@@ -16,6 +16,7 @@ import RateWorker from "@/pages/RateWorker";
 import Signup from "@/pages/Signup";
 import RequestWorker from "@/pages/RequestWorker";
 import CheckoutSuccess from "@/pages/CheckoutSuccess";
+import WhyKashWork from "@/pages/WhyKashWork";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ function Router() {
         <Route path="/signup" component={Signup} />
         <Route path="/request" component={RequestWorker} />
         <Route path="/checkout/success" component={CheckoutSuccess} />
+        <Route path="/why-kashwork" component={WhyKashWork} />
         <Route component={NotFound} />
       </Switch>
     </AppLayout>

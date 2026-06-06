@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import { User, Menu, X, Home, Users, UserPlus, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { User, Menu, X, Home, Users, UserPlus, LayoutDashboard, ShieldCheck, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 const NAV_LINKS = [
   { href: "/", label: "Home", icon: Home },
   { href: "/workers", label: "Find Workers", icon: Users },
   { href: "/register", label: "Register as Worker", icon: UserPlus },
+  { href: "/why-kashwork", label: "Why KashWork?", icon: HelpCircle },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin", label: "Admin", icon: ShieldCheck },
 ];
@@ -34,6 +35,12 @@ export function Navbar() {
           <Link href="/register" className="text-foreground/80 hover:text-primary transition-colors">
             Register as Worker
           </Link>
+          <Link
+            href="/why-kashwork"
+            className={`transition-colors ${location === "/why-kashwork" ? "text-primary font-semibold" : "text-foreground/80 hover:text-primary"}`}
+          >
+            Why KashWork?
+          </Link>
         </nav>
 
         {/* Desktop auth buttons */}
@@ -57,6 +64,7 @@ export function Navbar() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-72 p-0 flex flex-col">
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             {/* Brand header */}
             <div className="flex items-center gap-2 px-5 py-5 border-b">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-xl">
